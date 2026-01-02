@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Habit Tracker Pro</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">HT</div>
+      <div>
+        <h1>Habit Tracker</h1>
+        <p class="muted" id="todayLine">—</p>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn" id="btnAddHabit">Add habit</button>
+      <button class="btn btn-ghost" id="btnExportJson">Export JSON</button>
+      <button class="btn btn-ghost" id="btnExportCsv">Export CSV</button>
+
+      <label class="btn btn-ghost file-btn">
+        Import
+        <input id="fileImport" type="file" accept="application/json" hidden />
+      </label>
+
+      <button class="btn btn-ghost" id="btnTheme" aria-pressed="false" title="Toggle theme">Theme</button>
+    </div>
+  </header>
+
+  <main id="main" class="layout">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Habits</h2>
+        <div class="stack">
+          <input id="q" class="input" placeholder="Search habits…" />
+          <select id="filterStatus" class="input">
+            <option value="active">Active</option>
+            <option value="archived">Archived</option>
+            <option value="all">All</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="habitList" class="habit-list" role="list"></div>
+      <div class="panel-foot">
+        <p class="muted" id="dbInfo">—</p>
+      </div>
+    </section>
+
+    <section class="panel panel-wide">
+      <div class="panel-head panel-head-row">
+        <div>
+          <h2>Calendar</h2>
+          <p class="muted" id="selectedDateLine">—</p>
+        </div>
+
+        <div class="cal-actions">
+          <button class="btn btn-ghost" id="btnPrevMonth" aria-label="Previous month">◀</button>
+          <button class="btn btn-ghost" id="btnThisMonth">This month</button>
+          <button class="btn btn-ghost" id="btnNextMonth" aria-label="Next month">▶</button>
+        </div>
+      </div>
+
+      <div id="calendar" class="calendar" aria-label="Monthly calendar"></div>
+
+      <div class="split">
+        <section class="subpanel">
+          <div class="subhead">
+            <h3>Day log</h3>
+            <div class="stack">
+              <button class="btn btn-ghost" id="btnMarkAll">Mark all done</button>
+              <button class="btn btn-ghost" id="btnClearAll">Clear all</button>
+            </div>
+          </div>
+          <div id="dayLog" class="day-log"></div>
+        </section>
+
+        <section class="subpanel">
+          <div class="subhead">
+            <h3>Stats</h3>
+          </div>
+          <div id="stats" class="stats"></div>
+
+          <div class="subhead">
+            <h3>Reminders (optional)</h3>
+          </div>
+          <div class="reminders">
+            <button class="btn btn-ghost" id="btnEnableNotifs">Enable notifications</button>
+            <p class="muted" id="notifsState">—</p>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <!-- Habit modal -->
+  <dialog id="habitModal" class="modal" aria-labelledby="modalTitle">
+    <form method="dialog" id="habitForm" class="modal-card">
+      <header class="modal-head">
+        <h2 id="modalTitle">New habit</h2>
+        <button class="icon-btn" value="cancel" aria-label="Close">✕</button>
+      </header>
+
+      <div class="grid">
+        <label class="field">
+          <span>Name</span>
+          <input class="input" name="name" id="habitName" required maxlength="60" placeholder="e.g., Workout" />
+        </label>
+
+        <label class="field">
+          <span>Icon</span>
+          <input class="input" name="icon" id="habitIcon" maxlength="4" placeholder="e.g., 🏋️" />
+        </label>
+
+        <label class="field">
+          <span>Color</span>
+          <input class="input" name="color" id="habitColor" type="color" value="#5b8cff" />
+        </label>
+
+        <label class="field">
+          <span>Daily target</span>
+          <input class="input" name="target" id="habitTarget" type="number" min="1" step="1" value="1" />
+        </label>
+
+        <label class="field field-wide">
+          <span>Schedule</span>
+          <div class="chips" id="dowChips" role="group" aria-label="Days of week"></div>
+        </label>
+
+        <label class="field">
+          <span>Reminder time</span>
+          <input class="input" name="reminderTime" id="habitReminderTime" type="time" />
+          <small class="muted">Triggers while this tab is open (without Push/back-end).</small>
+        </label>
+
+        <label class="field field-wide">
+          <span>Notes</span>
+          <textarea class="input" name="notes" id="habitNotes" rows="3" maxlength="400" placeholder="Optional…"></textarea>
+        </label>
+      </div>
+
+      <footer class="modal-foot">
+        <div class="left">
+          <button class="btn btn-danger" id="btnArchiveHabit" type="button">Archive</button>
+        </div>
+        <div class="right">
+          <button class="btn btn-ghost" value="cancel">Cancel</button>
+          <button class="btn" id="btnSaveHabit" value="default">Save</button>
+        </div>
+      </footer>
+
+      <input type="hidden" id="habitId" />
+    </form>
+  </dialog>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
